@@ -1,4 +1,13 @@
 #include "nearest.hpp"
+#include "rtree.hpp"
+
+    // Helpers disponibles (borrar comentarios antes de entregar):
+    // - crear_nodo()
+    // - crear_entrada_punto(punto)
+    // - crear_entrada_interna(mbr, indice_hijo)
+    // - agregar_entrada(nodo, entrada)
+    // - centro_x(mbr)
+    // - calcular_mbr_nodo(nodo)
 
 std::vector<Nodo> construir_nearest_x(const std::vector<Punto>& puntos) {
     // TODO: Implementar método Nearest-X.

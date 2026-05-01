@@ -55,3 +55,40 @@ bool mbr_punto_dentro(const MBR& punto, const MBR& consulta) {
            punto.y1 >= consulta.y1 &&
            punto.y1 <= consulta.y2;
 }
+
+std::vector<Punto> buscar_rango(const std::string& ruta_arbol, const MBR& consulta, IOStats* out_io) {
+    ArchivoRTree archivo(ruta_arbol);
+    std::vector<Punto> resultado;
+
+    buscar_rango_rec(archivo, 0, consulta, resultado);
+
+    if (out_io != nullptr) {
+        *out_io = archivo.obtener_io();
+    }
+
+    return resultado;
+}
+
+void buscar_rango_rec(ArchivoRTree& archivo, std::size_t indice_nodo, const MBR& consulta, std::vector<Punto>& resultado) {
+    Nodo nodo = archivo.leer_nodo(indice_nodo);
+
+    if (es_hoja(nodo)) {
+        for (int i = 0; i < nodo.k; i++) {
+            const Entrada& entrada = nodo.entradas[i];
+
+            if (mbr_punto_dentro(entrada.mbr, consulta)) {
+                resultado.push_back(punto_desde_entrada(entrada));
+            }
+        }
+
+        return;
+    }
+
+    for (int i = 0; i < nodo.k; i++) {
+        const Entrada& entrada = nodo.entradas[i];
+
+        if (intersectan(entrada.mbr, consulta)) {
+            buscar_rango_rec(archivo, static_cast<std::size_t>(entrada.hijo), consulta, resultado);
+        }
+    }
+}

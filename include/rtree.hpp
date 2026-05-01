@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "node.hpp"
+#include "disk.hpp"
 
 // Crea un MBR vacío para calcular envolventes.
 MBR crear_mbr_vacio();
@@ -24,3 +25,9 @@ bool intersectan(const MBR& a, const MBR& b);
 
 // Indica si una entrada hoja, vista como punto, cae dentro de la consulta.
 bool mbr_punto_dentro(const MBR& punto, const MBR& consulta);
+
+// Busca todos los puntos contenidos en consulta, leyendo nodos desde archivo.
+std::vector<Punto> buscar_rango(const std::string& ruta_arbol, const MBR& consulta, IOStats* out_io);
+
+// Versión recursiva auxiliar.
+void buscar_rango_rec(ArchivoRTree& archivo, std::size_t indice_nodo, const MBR& consulta, std::vector<Punto>& resultado);

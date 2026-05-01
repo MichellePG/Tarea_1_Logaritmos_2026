@@ -15,6 +15,7 @@ outputs/trees/*.bin
 outputs/results/*.csv
 outputs/plots/*.png
 outputs/plots/*.pdf
+outputs/results/*.txt
 
 # Sistema / editor
 .vscode/

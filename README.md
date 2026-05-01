@@ -90,7 +90,7 @@ Esto generará el ejecutable:
 Para recompilar desde cero:
 
 ```bash
-make clean && make
+make clean-all && make
 ```
 
 ## Uso
@@ -200,8 +200,20 @@ outputs/plots/
 
 ## Limpieza
 
-Para limpiar los archivos generados:
+Para limpiar compilación:
 
 ```bash
 make clean
+```
+
+Para limpiar los outputs generados:
+
+```bash
+make clean-outputs
+```
+
+Para limpiar todo:
+
+```bash
+make clean-all
 ```

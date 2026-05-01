@@ -17,5 +17,6 @@ std::vector<Nodo> construir_nearest_x(const std::vector<Punto>& puntos) {
     // 4. Crear nodos y generar entradas para el nivel superior.
     // 5. Repetir hasta crear la raíz en la posición 0.
 
+    (void)puntos;    
     return {};
 }

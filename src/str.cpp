@@ -19,5 +19,6 @@ std::vector<Nodo> construir_str(const std::vector<Punto>& puntos) {
     // 5. Agrupar de a B entradas.
     // 6. Repetir hasta crear la raíz en la posición 0.
 
+    (void)puntos;
     return {};
 }

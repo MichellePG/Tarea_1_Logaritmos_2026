@@ -8,7 +8,7 @@
 
 /**
  * Compara dos entradas según el centro X de sus MBR.
- * Si tienen el mismo centro X, compara por centro Y para un orden estable.
+ * Si tienen el mismo centro X, compara por centro Y para un orden determinista.
  */
 static bool comparar_por_centro_x(const Entrada& a, const Entrada& b)
 {
@@ -24,7 +24,7 @@ static bool comparar_por_centro_x(const Entrada& a, const Entrada& b)
 
 /**
  * Compara dos entradas según el centro Y de sus MBR.
- * Si tienen el mismo centro Y, compara por centro X para un orden estable.
+ * Si tienen el mismo centro Y, compara por centro X para un orden determinista.
  */
 static bool comparar_por_centro_y(const Entrada& a, const Entrada& b)
 {
@@ -42,8 +42,8 @@ static bool comparar_por_centro_y(const Entrada& a, const Entrada& b)
  * Construye un R-tree usando el método Sort-Tile-Recursive (STR).
  *
  * El algoritmo divide recursivamente los datos en una grilla 2D:
- * 1. Ordena por coordenada X y divide en S = ceil(sqrt(n/B)) franjas verticales.
- * 2. Dentro de cada franja, ordena por Y y divide en S grupos.
+ * 1. Ordena por coordenada X y divide en hasta S = ceil(sqrt(n/B)) franjas verticales.
+ * 2. Dentro de cada franja, ordena por Y y divide en hasta S grupos.
  * 3. Cada grupo final forma un nodo con hasta B entradas.
  * 4. Se repite recursivamente hasta que todas las entradas quepan en la raíz.
  *

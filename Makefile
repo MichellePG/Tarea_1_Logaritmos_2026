@@ -29,3 +29,8 @@ check-europa:
 	./$(TARGET) check-data data/europa.bin 32
 
 .PHONY: all clean clean-outputs check-random check-europa
+
+
+run-build-experiments: rtree
+	mkdir -p outputs/trees outputs/results
+	./scripts/run_build_experiments.sh

@@ -7,32 +7,44 @@ static const int B = 204; // Capacidad máxima de entradas por nodo.
 
 static const int TAMANO_NODO = 4096; // Tamaño exacto de un bloque en disco.
 
-// Punto 2D leído desde los archivos random.bin / europa.bin.
+// Representa un punto 2D en coordenadas flotantes.
+// Campos:
+//   x: coordenada X.
+//   y: coordenada Y.
 struct Punto {
     float x;
     float y;
 };
 
-// Minimum Bounding Rectangle.
+// Minimum Bounding Rectangle (MBR)
+// Campos:
+//   x1: mínimo en X.
+//   x2: máximo en X.
+//   y1: mínimo en Y.
+//   y2: máximo en Y.
 struct MBR {
-    float x1; // x1 = mínimo en X
-    float x2; // x2 = máximo en X
-    float y1; // y1 = mínimo en Y
-    float y2; // y2 = máximo en Y
+    float x1;
+    float x2; 
+    float y1;
+    float y2; 
 };
 
-// Entrada par clave-valor.
+// Estructura de entrada que asocia un MBR con un puntero/índice a un hijo.
 #pragma pack(push, 1)
 struct Entrada {
     MBR mbr; // clave
     int32_t hijo; // valor: índice del nodo hijo en el archivo/vector si es interno,-1 si es hoja.
 };
 
-// Nodo de R-tree.
+// Estructura de nodo de R-tree para almacenamiento en disco.
+// Campos:
+//   k: número de entradas válidas en el nodo.
+//   entradas: arreglo fijo con capacidad máxima "B".
+//   pad: relleno para completar el tamaño exacto del bloque en disco.
 struct Nodo {
-    int32_t k; // Guarda la cantidad de hijos actualmente contenidos en el nodo, 4 bytes.
+    int32_t k; 
     Entrada entradas[B];
-    char pad[12]; // pad: 12 bytes libres para completar los 4096 bytes del nodo.
+    char pad[12];
 };
 
 #pragma pack(pop)
@@ -59,17 +71,19 @@ inline MBR crear_mbr_punto(const Punto& punto) {
     return crear_mbr_punto(punto.x, punto.y);
 }
 
-// Crea una entrada hoja a partir de un punto.
+// Crea una entrada de hoja a partir de un "Punto".
+// El campo "hijo" se marca como -1 para indicar que es una hoja.
 inline Entrada crear_entrada_punto(const Punto& punto) {
     return Entrada{crear_mbr_punto(punto), -1};
 }
 
-// Crea una entrada interna a partir de un MBR y el índice del hijo.
+// Crea una entrada interna que asocia un "MBR" con el índice del nodo hijo.
 inline Entrada crear_entrada_interna(const MBR& mbr, int32_t hijo) {
     return Entrada{mbr, hijo};
 }
 
-// Crea un nodo vacío.
+// Crea un nodo vacío con todos los campos inicializados a valores por defecto.
+// El contador "k" se inicializa en 0 y las entradas se marcan como vacías.
 inline Nodo crear_nodo() {
     Nodo nodo;
     nodo.k = 0;
@@ -86,7 +100,7 @@ inline Nodo crear_nodo() {
     return nodo;
 }
 
-// Agrega una entrada al final del nodo.
+// Agrega una entrada al final del nodo. Lanza excepción si el nodo está lleno.
 inline void agregar_entrada(Nodo& nodo, const Entrada& entrada) {
     if (nodo.k >= B) {
         throw std::runtime_error("No se puede agregar entrada: nodo lleno");
@@ -96,7 +110,7 @@ inline void agregar_entrada(Nodo& nodo, const Entrada& entrada) {
     nodo.k++;
 }
 
-// Un nodo hoja tiene entradas con hijo == -1.
+// Indica si el nodo es una hoja (las entradas tienen hijo = -1) o está vacío (k=0).
 inline bool es_hoja(const Nodo& nodo) {
     if (nodo.k == 0) {
         return true;

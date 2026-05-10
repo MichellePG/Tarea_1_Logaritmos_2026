@@ -166,6 +166,10 @@ Los resultados se guardan en:
 
 outputs/results/build_times.csv
 
+Además los árboles se guardan en:
+
+outputs/trees/
+
 ### Consultas
 
 Para correr los experimentos de consultas:

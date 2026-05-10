@@ -3,15 +3,18 @@
 #include <algorithm>
 #include <limits>
 
+// Crea un MBR vacío con límites infinitos.
 MBR crear_mbr_vacio() {
     float infinito = std::numeric_limits<float>::infinity();
     return MBR{infinito, -infinito, infinito, -infinito};
 }
 
+// Devuelve true si el MBR está vacío.
 bool mbr_esta_vacio(const MBR& mbr) {
     return mbr.x1 > mbr.x2 || mbr.y1 > mbr.y2;
 }
 
+// Expande "destino" para incluir el rectángulo "nuevo".
 void expandir_mbr(MBR& destino, const MBR& nuevo) {
     if (mbr_esta_vacio(destino)) {
         destino = nuevo;
@@ -24,6 +27,7 @@ void expandir_mbr(MBR& destino, const MBR& nuevo) {
     destino.y2 = std::max(destino.y2, nuevo.y2);
 }
 
+// Calcula el MBR que cubre todas las entradas de un nodo.
 MBR calcular_mbr_nodo(const Nodo& nodo) {
     MBR resultado = crear_mbr_vacio();
 
@@ -34,14 +38,17 @@ MBR calcular_mbr_nodo(const Nodo& nodo) {
     return resultado;
 }
 
+// Devuelve la coordenada X del centro del MBR.
 float centro_x(const MBR& mbr) {
     return (mbr.x1 + mbr.x2) / 2.0f;
 }
 
+// Devuelve la coordenada Y del centro del MBR.
 float centro_y(const MBR& mbr) {
     return (mbr.y1 + mbr.y2) / 2.0f;
 }
 
+// Devuelve true si los dos MBR se solapan.
 bool intersectan(const MBR& a, const MBR& b) {
     return a.x1 <= b.x2 &&
            a.x2 >= b.x1 &&
@@ -49,6 +56,7 @@ bool intersectan(const MBR& a, const MBR& b) {
            a.y2 >= b.y1;
 }
 
+// Comprueba si las coordenadas del punto quedan dentro de la consulta.
 bool mbr_punto_dentro(const MBR& punto, const MBR& consulta) {
     return punto.x1 >= consulta.x1 &&
            punto.x1 <= consulta.x2 &&
@@ -56,6 +64,7 @@ bool mbr_punto_dentro(const MBR& punto, const MBR& consulta) {
            punto.y1 <= consulta.y2;
 }
 
+// Abre el archivo R-tree y devuelve los puntos que caen en "consulta".
 std::vector<Punto> buscar_rango(const std::string& ruta_arbol, const MBR& consulta, IOStats* out_io) {
     ArchivoRTree archivo(ruta_arbol);
     std::vector<Punto> resultado;
@@ -69,6 +78,7 @@ std::vector<Punto> buscar_rango(const std::string& ruta_arbol, const MBR& consul
     return resultado;
 }
 
+// Busca en el nodo indicado y sus descendientes los puntos que caen en "consulta" agregándolos a "resultado".
 void buscar_rango_rec(ArchivoRTree& archivo, std::size_t indice_nodo, const MBR& consulta, std::vector<Punto>& resultado) {
     Nodo nodo = archivo.leer_nodo(indice_nodo);
 

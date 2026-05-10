@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+// Lee hasta N puntos desde un archivo binario y los devuelve en un vector.
 std::vector<Punto> leer_puntos_bin(const std::string& ruta, std::size_t N) {
     std::vector<Punto> puntos;
     puntos.reserve(N);
@@ -9,6 +10,7 @@ std::vector<Punto> leer_puntos_bin(const std::string& ruta, std::size_t N) {
     std::ifstream in(ruta.c_str(), std::ios::binary);
     if (!in) throw std::runtime_error("No se pudo abrir el archivo de puntos: " + ruta);
 
+    // Itera y lee pares de floats, si la lectura falla se detiene.
     for (std::size_t i = 0; i < N; i++) {
         Punto punto;
         in.read(reinterpret_cast<char*>(&punto.x), sizeof(float));
@@ -21,6 +23,7 @@ std::vector<Punto> leer_puntos_bin(const std::string& ruta, std::size_t N) {
     return puntos;
 }
 
+// Escribe una lista de nodos al archivo en formato binario.
 void escribir_nodos_bin(const std::string& ruta, const std::vector<Nodo>& nodos, IOStats* io) {
     std::ofstream out(ruta.c_str(), std::ios::binary | std::ios::trunc);
     if (!out) throw std::runtime_error("No se pudo abrir el archivo para escritura: " + ruta);
@@ -33,10 +36,12 @@ void escribir_nodos_bin(const std::string& ruta, const std::vector<Nodo>& nodos,
     }
 }
 
+// Abre el archivo binario que guarda el R-tree.
 ArchivoRTree::ArchivoRTree(const std::string& ruta) : archivo(ruta.c_str(), std::ios::binary), io() {
     if (!archivo) throw std::runtime_error("No se pudo abrir el archivo de R-tree: " + ruta);
 }
 
+// Lee un nodo en la posición indice.
 Nodo ArchivoRTree::leer_nodo(std::size_t indice) {
     Nodo nodo;
 

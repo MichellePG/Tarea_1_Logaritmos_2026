@@ -8,6 +8,14 @@
 /**
  * Compara dos entradas según el centro X de sus MBR.
  * Si tienen el mismo centro X, compara por centro Y para dejar un orden estable.
+ *
+ * Parámetros:
+ *   a: Primera entrada a comparar.
+ *   b: Segunda entrada a comparar.
+ *
+ * Retorna:
+ *   true si a debe ir antes que b en el orden usado por Nearest-X,
+ *   false en caso contrario.
  */
 static bool comparar_por_centro_x(const Entrada& a, const Entrada& b)
 {
@@ -27,6 +35,13 @@ static bool comparar_por_centro_x(const Entrada& a, const Entrada& b)
  * El árbol se construye en un vector de nodos. La posición 0 queda reservada
  * para la raíz. Los nodos creados en los niveles inferiores se guardan desde
  * la posición 1 en adelante, y sus padres los referencian usando esos índices.
+ *
+ * Parámetros:
+ *   puntos: Vector con los puntos que se usarán para construir el R-tree.
+ *
+ * Retorna:
+ *   Un vector de nodos que representa el R-tree construido en memoria.
+ *   Si el vector de puntos está vacío, retorna un vector vacío.
  */
 std::vector<Nodo> construir_nearest_x(const std::vector<Punto>& puntos)
 {

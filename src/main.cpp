@@ -10,6 +10,8 @@
 #include "rtree.hpp"
 #include "str.hpp"
 
+// Helper para medir tiempos en milisegundos.
+// Uso: llamar a "iniciar()" y luego "ms()" para obtener los milisegundos transcurridos desde el inicio.
 struct Crono {
     std::chrono::high_resolution_clock::time_point inicio;
 
@@ -23,6 +25,7 @@ struct Crono {
     }
 };
 
+// Imprime el uso esperado del programa.
 static void imprimir_uso() {
     std::cerr << "Uso:\n";
     std::cerr << "  ./rtree check-data <archivo_puntos.bin> <N>\n";
@@ -30,6 +33,11 @@ static void imprimir_uso() {
     std::cerr << "  ./rtree query <archivo_tree.bin> <xmin> <xmax> <ymin> <ymax>\n";
 }
 
+// Comando que lee hasta N puntos del archivo y los imprime.
+// Parámetros:
+//   argc/argv: argumentos del programa (argv[2]=archivo, argv[3]=N).
+// Retorna:
+//   0 si tiene éxito, 1 en uso inválido.
 static int comando_check_data(int argc, char** argv) {
     if (argc != 4) {
         std::cerr << "Uso: ./rtree check-data <archivo_puntos.bin> <N>\n";
@@ -49,6 +57,11 @@ static int comando_check_data(int argc, char** argv) {
     return 0;
 }
 
+// Comando que construye un R-tree con el método especificado y escribe el árbol resultante en un archivo binario.
+// Parámetros:
+//   argc/argv: argumentos del programa (metodo, archivo_puntos, archivo_salida, N).
+// Retorna:
+//   0 si tiene éxito, 1 en caso de error de uso o construcción.
 static int comando_build(int argc, char** argv) {
     if (argc != 6) {
         std::cerr << "Uso: ./rtree build <nearest|str> <archivo_puntos.bin> <archivo_salida_tree.bin> <N>\n";
@@ -103,6 +116,11 @@ static int comando_build(int argc, char** argv) {
     return 0;
 }
 
+// Comando que abre el árbol en disco y busca todos los puntos dentro de la caja definida por xmin,xmax,ymin,ymax.
+// Parámetros:
+//   argc/argv: argumentos del programa (archivo_tree, xmin, xmax, ymin, ymax).
+// Retorna:
+//   0 si tiene éxito, 1 en caso de uso inválido.
 static int comando_query(int argc, char** argv) {
     if (argc != 7) {
         std::cerr << "Uso: ./rtree query <archivo_tree.bin> <xmin> <xmax> <ymin> <ymax>\n";

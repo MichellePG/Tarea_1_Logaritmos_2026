@@ -28,13 +28,19 @@ check-random:
 check-europa:
 	./$(TARGET) check-data data/europa.bin 32
 
-.PHONY: all clean clean-outputs clean-all check-random check-europa run-build-experiments run-query-experiments
 
-
-run-build-experiments: rtree
+run-build-experiments: $(TARGET)
 	mkdir -p outputs/trees outputs/results
-	./scripts/run_build_experiments.sh
+	bash ./scripts/run_build_experiments.sh
 
 run-query-experiments: $(TARGET)
 	mkdir -p outputs/results
 	python3 scripts/run_query_experiments.py	
+
+
+plots:
+	mkdir -p outputs/plots
+	python3 scripts/plot_results.py
+	
+
+.PHONY: all clean clean-outputs clean-all check-random check-europa run-build-experiments run-query-experiments plots
